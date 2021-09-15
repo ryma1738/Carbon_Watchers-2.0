@@ -1,0 +1,2 @@
+DROP DATABASE IF EXISTS carbonWatchersMERN;
+CREATE DATABASE carbonWatchersMERN;

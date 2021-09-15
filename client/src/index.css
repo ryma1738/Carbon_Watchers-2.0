@@ -1,0 +1,79 @@
+:root {
+  --background: #f6f7f8;
+  --green: #004300;
+  --lightGreen: #E4FFDD;
+  --darkBackground: #222e37;
+  --silver: #7d8491;
+}
+
+body {
+  background: var(--darkBackground);
+  color: var(--background);
+  
+}
+
+.ffv {
+  font-family: "Vanadine", sans-serif;
+  font-weight: bold;
+}
+
+.nav-item {
+  color: var(--background);
+  border-right: 2px solid var(--green);
+}
+
+.hero-img {
+  max-width: 100%;
+  margin: 0;
+}
+
+.hero-img2 {
+  display: none;
+}
+
+.gce {
+  border-bottom: 3px solid var(--green);
+}
+
+.gce-left {
+  background: linear-gradient(to right, var(--silver), var(--darkBackground));
+  text-shadow: 1px 1px 5px black;
+}
+
+.gce-right {
+  background: linear-gradient(to left, var(--silver), var(--darkBackground));
+  text-shadow: 1px 1px 5px black;
+}
+
+.px-6 {
+  padding: 0px 15%;
+}
+
+@media only screen and (max-width: 600px) {
+
+}
+
+@media only screen and (max-width: 768px) {
+  .hero-img1 {
+    display: none;
+  }
+  .hero-img2 {
+    display: inline-block;
+  }
+  .px-6 {
+    padding: 0;
+  }
+}
+
+@media only screen and (max-width: 992px) {
+  .nav-item {
+    border: none;
+    text-align: end;
+  }
+}
+
+@media only screen and (min-width: 1400px) {
+  .landing {
+    background-size: cover;
+  }
+}
