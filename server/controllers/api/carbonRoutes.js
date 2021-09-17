@@ -91,24 +91,4 @@ router.post('/vehicle', async function (req, res) {
     
 });
 
-router.get('/models', async function (req, res) {
-    // query = ?make=Toyota
-    let makeId = await getVehicleMake(req.query.make.toLowerCase());
-    const { data } = await axios.get('https://www.carboninterface.com/api/v1/vehicle_makes/' + makeId + "/vehicle_models", {
-      headers: {
-        'Authorization': process.env.API_KEY,
-        'content-type': 'application/json'
-      }
-    });
-    let models = [];
-    for (let i = 0; i < data.length; i++) {
-        let model = data[i].data.attributes.name;
-        if (models.indexOf(model) == -1) {
-            models.push(model);
-        } 
-    }
-    models = models.sort();
-    res.status(200).json(models);
-});
-
 module.exports = router;

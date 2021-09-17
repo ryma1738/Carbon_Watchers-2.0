@@ -1,18 +1,26 @@
 {
-  "name": "Carbon_Watchers_MERN",
-  "version": "1.0.0",
+  "name": "carbon_watchers",
+  "version": "2.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "client": "cd client && npm start",
+    "server": "cd server && npm start",
+    "develop": "concurrently \"cd server && npm start\" \"cd client && npm start\"",
+    "install": "cd server && npm i && cd ../client && npm i",
+    "build": "cd client && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ryma1738/Carbon_Watchers_SERN-Stack.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "axois": "0.0.1-security",
-    "express": "^4.17.1",
-    "mongodb": "^4.1.2",
-    "mongoose": "^6.0.5"
+  "bugs": {
+    "url": "https://github.com/ryma1738/Carbon_Watchers_SERN-Stack/issues"
+  },
+  "homepage": "https://github.com/ryma1738/Carbon_Watchers_SERN-Stack#readme",
+  "devDependencies": {
+    "concurrently": "^6.2.1"
   }
 }
