@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/ryma1738/Carbon_Watchers_SERN-Stack#readme",
   "devDependencies": {
-    "concurrently": "^6.2.1"
+    "concurrently": "^6.2.1",
+    "nodemon": "^2.0.12"
   }
 }

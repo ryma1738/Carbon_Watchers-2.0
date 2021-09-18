@@ -1,7 +1,8 @@
 const router = require('express').Router();
-const userRoutes = require('./user-routes.js');
 const carbonRoutes = require('./carbonRoutes.js');
+const articleRoutes = require('./articleRoutes.js');
 
-router.use('/users', userRoutes);
 router.use('/carbon', carbonRoutes);
+router.use('/article', articleRoutes);
+
 module.exports = router;

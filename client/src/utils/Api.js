@@ -28,3 +28,13 @@ export const shippingApiCall = (weight, weightUnit, distance, distanceUnit, ship
         }
     });
 }
+
+export const newsApiCall = () => {
+    return fetch('/api/article/news', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
+}

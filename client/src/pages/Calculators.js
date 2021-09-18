@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import {Container, Row, Col, Tabs, Tab } from 'react-bootstrap';
+import {Container, Row, Col, Tabs, Tab, Spinner, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { makes } from '../components/make'
 import { models } from '../components/model';
 import { vehicleApiCall, flightApiCall, shippingApiCall } from '../utils/Api';
 
-function Calculators() {
+export default function Calculators() {
     const [key, setKey] = useState('vehicles');
     const [make, setMake] = useState('');
     const tempResponse = (
@@ -12,6 +12,13 @@ function Calculators() {
             <p className="text-center">Fill out the form above to see your results!</p>
         </div>
     );
+    const loadingResponse = (
+        <Col sm={12} className='d-flex justify-content-center align-items-center' style={{ "minHeight": "20vh" }}>
+            <Spinner animation="border" role="status" size="lg">
+                <span className="visually-hidden">Loading...</span>
+            </Spinner>
+        </Col>
+    )
     // vehicle states / functions
     const [vehicleMake, setVehicleMake] = useState('');
     const [vehicleModel, setVehicleModel] = useState('');
@@ -22,24 +29,27 @@ function Calculators() {
     async function vehicleSubmit(e) {
         e.preventDefault();
         if (vehicleMake && vehicleModel && vehicleYear && vehicleDistance && vehicleDistUnit) {
+            setVehicleResponse(loadingResponse);
             const response = await vehicleApiCall(vehicleMake, vehicleModel, vehicleYear, vehicleDistance, vehicleDistUnit);
 
             if (!response.ok) {
-                alert('Vehicle Model and Year not found. Please enter a valid year for the model');
-                throw new Error('Vehicle Model and Year not found. Please enter a valid year for the model');
+                setVehicleResponse((
+                    <p className="p-3 text-center">Vehicle Model and Year configuration not found. Please enter a valid year for the model.</p>
+                    ));
+                return;
             }
 
             const carbonData = await response.json();
             const jsxData = (
                 <>
                     <div>
-                        <p className="text-center fw-lighter ps-2">Your {vehicleMake} {vehicleModel} {vehicleYear} will emit {carbonData.carbon_lb} lbs of CO2 after driving {vehicleDistance} {vehicleDistUnit === 'mi'? "miles." : "kilometers."} </p>
+                        <p className="text-center fw-lighter ps-2">Your {vehicleMake} {vehicleModel} {vehicleYear} will emit {carbonData.carbon_lb.toLocaleString()} lbs of CO2 after driving {vehicleDistance} {vehicleDistUnit === 'mi'? "miles." : "kilometers."} </p>
                     </div>
                     <div className="d-flex justify-content-center">
                         <ul>
                             <li>Additional Info:</li>
-                            <li>Total CO2 in g: {carbonData.carbon_g}</li>
-                            <li>Total CO2 in Lbs: {carbonData.carbon_lb}</li>
+                            <li>Total CO2 in grams: {carbonData.carbon_g.toLocaleString()}</li>
+                            <li>Total CO2 in Lbs: {carbonData.carbon_lb.toLocaleString()}</li>
                             <li>Total CO2 in Mt: {carbonData.carbon_mt}</li>
                         </ul>
                     </div>
@@ -57,11 +67,15 @@ function Calculators() {
     async function flightSubmit(e) {
         e.preventDefault();
         if (depart && arrival) {
+            setFlightResponse(loadingResponse);
             const response = await flightApiCall(arrival, depart, returnTrip);
-
+            
             if (!response.ok) {
-                alert('Airport code(s) not found. Please try again');
-                throw new Error('Airport code(s) not found. Please try again');
+                setFlightResponse((
+                    <p className="p-3 text-center">Airport code(s) not found. You can find the 3 letter airport code 
+                    by Googleing your departing and or destination airport. It will be located in the google description under Code: </p>
+                ));
+                return;
             }
 
             const carbonData = await response.json();
@@ -73,9 +87,9 @@ function Calculators() {
                     <div className="d-flex justify-content-center">
                         <ul>
                             <li>Additional Info:</li>
-                            <li>Total CO2 in Lbs: {carbonData[1].carbon_lb}</li>
+                            <li>Total CO2 in Lbs: {carbonData[1].carbon_lb.toLocaleString()}</li>
                             <li>Total CO2 in Mt: {carbonData[1].carbon_mt}</li>
-                            <li>Total CO2 per person in Lbs: {carbonData[0].carbon_lb}</li>
+                            <li>Total CO2 per person in Lbs: {carbonData[0].carbon_lb.toLocaleString()}</li>
                             <li>Total CO2 per person in Mt: {carbonData[0].carbon_mt}</li>
                         </ul>
                     </div>
@@ -96,24 +110,27 @@ function Calculators() {
     async function shippingSubmit(e) {
         e.preventDefault();
         if (shippingMethod && shippingDistance && shippingDistUnit && shippingWeight && shippingWeightUnit) {
+            setShippingResponse(loadingResponse);
             const response = await shippingApiCall(shippingWeight, shippingWeightUnit, shippingDistance, shippingDistUnit, shippingMethod);
 
             if (!response.ok) {
-                alert('An error has occurred. Please check values and try again.');
-                throw new Error('An error has occurred. Please check values and try again.');
+                setShippingResponse((
+                    <p className="p-3 text-center">An error has occurred. Please check values and try again.</p>
+                ));
+                return;
             }
 
             const carbonData = await response.json();
             const jsxData = (
                 <>
                     <div>
-                        <p className="text-center fw-lighter">Your package will contribute {carbonData.carbon_g < 500 ? carbonData.carbon_g + " grams" : carbonData.carbon_lb >= 1.1 && carbonData.carbon_lb <= 2250 ? carbonData.carbon_lb + " Lbs" : carbonData.carbon_mt + " Metric Tons"} of CO2 after total after traveling a distance of {carbonData.distance_value} miles by {shippingMethod}. </p>
+                        <p className="text-center fw-lighter">Your package will contribute {carbonData.g < 500 ? carbonData.g + " grams" : carbonData.carbon_lb >= 1.1 && carbonData.carbon_lb <= 2250 ? carbonData.carbon_lb.toLocaleString() + " Lbs" : carbonData.carbon_mt + " Metric Tons"} of CO2 after total after traveling a distance of {carbonData.distance_value} miles by {shippingMethod}. </p>
                     </div>
                     <div className="d-flex justify-content-center">
                         <ul>
                             <li>Additional Info:</li>
-                            <li>Total CO2 in g: {carbonData.carbon_g}</li>
-                            <li>Total CO2 in Lbs: {carbonData.carbon_lb}</li>
+                            <li>Total CO2 in grams: {carbonData.carbon_g.toLocaleString()}</li>
+                            <li>Total CO2 in Lbs: {carbonData.carbon_lb.toLocaleString()}</li>
                             <li>Total CO2 in Mt: {carbonData.carbon_mt}</li>
                         </ul>
                     </div>
@@ -125,7 +142,7 @@ function Calculators() {
 
     //Main JSX
     return (
-<Container fluid='xxl' className="pt-3 px-0 fw-bolder fs-3">
+<Container  as="section" fluid='xxl' className="pt-3 px-0 fw-bolder fs-3">
     <Tabs activeKey={key} onSelect={(k) => setKey(k)} className="px-tabs" id="calculatorTabs" style={{ "borderBottom": "2px solid var(--silver)", "borderTop": "none"}}>
             {/* Vehicle Page */}
             <Tab eventKey="vehicles" title="Vehicles" className=" fw-bolder fs-3" >
@@ -192,14 +209,44 @@ function Calculators() {
                         <h3 className="text-center ffv">Calculate your flights emissions</h3>
                     </div>
                     <div>
-                        <label htmlFor="depart-code">Depart:</label>
-                        <input type="text" id="depart-code" maxLength={3} placeholder="Airport Code" 
+                        <label htmlFor="depart-code">Depart: </label>
+                        <input type="text" id="depart-code" className="input-tip" maxLength={3} placeholder="Airport Code" 
                         onBlur={(e) => setDepart(e.target.value)} required />
+                        <OverlayTrigger
+                        key="depart"
+                        placement="bottom"
+                        overlay={
+                            <Tooltip id={`tooltip-depart`}>
+                            You can find the 3 letter airport code by Googleing the airport you
+                            departed from. It will be located in the google description under Code:
+                            </Tooltip>
+                        }
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="me-2" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z" />
+                            </svg>
+                        </OverlayTrigger>
                     </div>
                     <div>
                         <label htmlFor="arrival-code">Arrival:</label>
-                        <input type="text" id="arrival-code" maxLength={3} placeholder="Airport Code" 
+                                <input type="text" id="arrival-code" className="input-tip" maxLength={3} placeholder="Airport Code"
                         onBlur={(e) => setArrival(e.target.value)} required />
+                        <OverlayTrigger
+                        key="arrival"
+                        placement="bottom"
+                        overlay={
+                            <Tooltip id={`tooltip-arrival`}>
+                            You can find the 3 letter airport code by Googleing the airport you will land at.
+                            It will be located in the google description under Code:
+                            </Tooltip>
+                        }
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="me-2" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z" />
+                            </svg>
+                        </OverlayTrigger>
                     </div>
                     <Row className="">
                         <Col sm={12} md={8} className="d-flex">
@@ -286,5 +333,3 @@ function Calculators() {
 </Container>
     )
 }
-
-export default Calculators;

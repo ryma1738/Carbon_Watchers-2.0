@@ -16,14 +16,35 @@ body {
   
 }
 
+.fit {
+  width: 100%;
+  height: 100%;
+}
+
+.text-link {
+  text-decoration: none;
+  color: var(--lightGreen);
+}
+
+.text-link:hover {
+  color: var(--green);
+}
+
 .ffv {
   font-family: "Vanadine", sans-serif;
   font-weight: bold;
 }
 
+.fs-0 {
+  font-size: 3em;
+}
 .nav-items {
   color: var(--background);
   border-right: 2px solid var(--green);
+  text-align: end;
+}
+.nav-font {
+  font-size: 1.35em;
 }
 
 .hero-img {
@@ -47,6 +68,12 @@ body {
 .gce-right {
   background: linear-gradient(to left, var(--silver), var(--darkBackground));
   text-shadow: 1px 1px 5px black;
+}
+
+.emissions {
+  color: rgb(161, 0, 0);
+  text-shadow: 1px 1px 2px black;
+  font-weight: bolder;
 }
 
 .px-6 {
@@ -129,6 +156,11 @@ body {
   margin-right: 10px;
   overflow: hidden;
   outline: none;
+}
+
+.input-tip {
+  min-width: 65%;
+  max-width: 65%;
 }
 
 .calculator-form select:focus, input:focus {
@@ -264,6 +296,11 @@ input[type="checkbox"].switch_1{
   min-width: 25%;
 }
 
+.input-tip-small {
+    min-width: 20% !important;
+    max-width: 20% !important;
+  }
+
 .calculator-form-divider {
   min-height: 20px;
 }
@@ -276,6 +313,13 @@ input[type="checkbox"].switch_1{
   border-bottom: 2px solid var(--green);
 }
 
+.article-border {
+  border-bottom: 3px solid var(--green);
+}
+
+.video-heights {
+  height: 315px; 
+}
 
 @media only screen and (max-width: 550px) {
   .calculator-form select#distanceUnit, select#shippingDistUnit {
@@ -290,6 +334,9 @@ input[type="checkbox"].switch_1{
   .hero-img2 {
     display: inline-block;
   }
+  .fs-0 {
+  font-size: 2em;
+}
   .px-6 {
     padding: 0;
   }
@@ -330,12 +377,22 @@ input[type="checkbox"].switch_1{
   .calculator-form-small label {
     margin-right: 4px;
   }
+  .input-tip {
+    min-width: 55% !important;
+    max-width: 55% !important;
+  }
+  .input-tip-small {
+    min-width: 25% !important;
+    max-width: 25% !important;
+  }
+  .video-heights {
+  height: 180px; 
+  }
 }
 
 @media only screen and (max-width: 992px) {
   .nav-items {
     border: none;
-    text-align: end;
   }
 }
 
