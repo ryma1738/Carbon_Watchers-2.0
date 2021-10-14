@@ -1,7 +1,7 @@
 # Carbon Watchers 2.0
 
 ## Description
-This site was created as a way to help spread awareness about climate change. This is a personal project created by me, as a way to put climate change into perspective in ways that most people never see. This site was created at the end of my coding boot camp course and is a remake of my group project. website I intend to publish on AWS.
+This site was created as a way to help spread awareness about climate change. This is a personal project created by me, as a way to put climate change into perspective in ways that most people never see. This site was created at the end of my coding boot camp course and is a remake of my group project. This is a website I intend to publish on AWS.
 
 ## Technologies used
 - React
